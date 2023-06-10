@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Spinner dropdown = findViewById(R.id.spinner);
-        String[] items = new String[]{"Select", "Library", "Building 12 (dont click this)"};
+        String[] items = new String[]{"Select", "Library", "Building12"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
 

@@ -1,5 +1,7 @@
 package com.example.project;
 
+import static android.icu.lang.UCharacter.toLowerCase;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,7 +33,7 @@ public class NavigationActivity extends AppCompatActivity {
         String destination = getIntent().getStringExtra("destination");
 
         steps = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM STEPS WHERE LOCATION=?", new String[]{destination});
+        Cursor cursor = db.rawQuery("SELECT * FROM STEPS WHERE LOCATION = ?", new String[]{destination});
 
         while (cursor.moveToNext()) {
             steps.add(cursor.getString(cursor.getColumnIndex("STEP")));
@@ -47,7 +49,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         // Initialize to the first step
         currentStep = 0;
-        updateView(imageView, textView);
+        updateView(imageView, textView, destination);
 
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +57,7 @@ public class NavigationActivity extends AppCompatActivity {
 
                 if (currentStep > 0) {
                     currentStep--;
-                    updateView(imageView, textView);
+                    updateView(imageView, textView, destination);
                 }
             }
         });
@@ -67,7 +69,7 @@ public class NavigationActivity extends AppCompatActivity {
 
                 if (currentStep < steps.size() - 1) {
                     currentStep++;
-                    updateView(imageView, textView);
+                    updateView(imageView, textView, destination);
                 }
             }
         });
@@ -83,10 +85,10 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
 
-    private void updateView(ImageView imageView, TextView textView) {
+    private void updateView(ImageView imageView, TextView textView, String destination) {
         textView.setText(String.format("Step %d: %s", currentStep + 1, steps.get(currentStep)));
 
-        int resId = getResources().getIdentifier("step" + (currentStep + 1), "drawable", getPackageName());
+        int resId = getResources().getIdentifier("step" + (currentStep + 1) + toLowerCase(destination), "drawable", getPackageName());
         Drawable stepImage = getResources().getDrawable(resId);
         imageView.setImageDrawable(stepImage);
     }
